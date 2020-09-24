@@ -248,7 +248,7 @@ public class DataSourceUtils {
   }
 
   public static JavaRDD<WriteStatus> doWriteOperation(HoodieWriteClient client, JavaRDD<HoodieRecord> hoodieRecords,
-      String instantTime, String operation) throws HoodieException {
+      String instantTime, String operation, String schema) throws HoodieException {
     if (operation.equals(DataSourceWriteOptions.BULK_INSERT_OPERATION_OPT_VAL())) {
       Option<BulkInsertPartitioner> userDefinedBulkInsertPartitioner =
           createUserDefinedBulkInsertPartitioner(client.getConfig());
@@ -257,7 +257,7 @@ public class DataSourceUtils {
       return client.insert(hoodieRecords, instantTime);
     } else {
       // default is upsert
-      return client.upsert(hoodieRecords, instantTime);
+      return client.upsert(hoodieRecords, instantTime, schema);
     }
   }
 
